@@ -1,5 +1,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { useState } from "react";
+import Task from "./components/task";
+import TaskState from "./components/TaskState";
 
 function App() {
   const [theme, setTheme] = useState("darkTheme");
@@ -39,7 +41,25 @@ function App() {
 
   const completeTask = (id) =>{
     setTask(task.map(task => task.id === id ? {...task, completed: !task.completed} : task))
-    
+  }
+
+  const filterTasks = (filter) => {
+    switch (filter) {
+      case "Active":
+        return task.filter((task) => !task.completed);
+      
+      case "Completed":
+        return task.filter((task) => task.completed);
+      
+      case "All":
+      default:
+        return task;
+    }
+  }
+
+  const handlerFilter = (newFilter) => {
+    setFilter(newFilter);
+    setTask(filterTasks(newFilter));
   }
 
   return (
@@ -90,29 +110,7 @@ function App() {
           <ul className="w-full rounded">
             {task.length > 0 ? (
               task.map((t) => (
-                <>
-                  <li
-                    key={t.id}
-                    className={`w-full py-2 ${toDoColor} mb-2 flex gap-4  text-light-grayish-blue-dark
-                    ${t.completed ? "line-through text-very-dark-grayish-blue opacity-75" : ""}`}
-                  >
-                    <button
-                      className={`border border-dark-grayish-blue-dark rounded-full w-6 h-6 flex items-center justify-center 
-                         ${t.completed ? "bg-gradient-to-r from-blue-custom to-purple-custom border-0" : "bg-transparent"}`}
-                      onClick={() => completeTask(t.id)}
-                    >
-                      {t.completed && (
-                        <img
-                          src="images/icon-check.svg"
-                          alt="icon check"
-                          className="w-3 h-3"
-                        />
-                      )}
-                    </button>
-                    {t.text}
-                  </li>
-                  <div className="w-full bg-very-dark-grayish-blue-alt opacity-70 h-[1.5px] mb-2" />
-                </>
+                <Task key={t.id} t={t} completeTask={completeTask} />
               ))
             ) : (
               <p className="text-center text-dark-grayish-blue my-6">
@@ -124,34 +122,9 @@ function App() {
           <div className="flex justify-between items-center mt-4 font-medium text-sm text-dark-grayish-blue w-full">
             <p className="flex-shrink-1">{task.length} items left</p>
             <div className="flex gap-4 justify-center mx-auto">
-              <button
-                onClick={() => setFilter("All")}
-                className={`hover:text-white duration-500 ${
-                  filter === "All" ? "text-purple" : "text-dark-grayish-blue"
-                }`}
-              >
-                All
-              </button>
-
-              <button
-                onClick={() => setFilter("Active")}
-                className={`hover:text-white duration-500 ${
-                  filter === "Active" ? "text-purple" : "text-dark-grayish-blue"
-                }`}
-              >
-                Active
-              </button>
-
-              <button
-                onClick={() => setFilter("Completed")}
-                className={`hover:text-white duration-500 ${
-                  filter === "Completed"
-                    ? "text-purple"
-                    : "text-dark-grayish-blue"
-                }`}
-              >
-                Completed
-              </button>
+              <TaskState setFilter={handlerFilter} filter={filter} text="Active" />
+              <TaskState setFilter={handlerFilter} filter={filter} text="Completed" />
+              <TaskState setFilter={handlerFilter} filter={filter} text="All" />
             </div>
             <button className="flex-shrink-1" onClick={deleteTask}>
               Clear completed
