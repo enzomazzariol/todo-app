@@ -1,4 +1,3 @@
-/** @type {import('tailwindcss').Config} */
 export default {
   content: [
     "./index.html",
@@ -24,14 +23,13 @@ export default {
       'dark-grayish-blue-dark': 'hsl(234, 11%, 52%)',
       'very-dark-grayish-blue-dark': 'hsl(233, 14%, 35%)',
       'very-dark-grayish-blue-alt': 'hsl(237, 14%, 26%)',
+      'blue-custom': '#3A82F7', 
+      'purple-custom': '#A855F7', 
     },
 
     fontFamily: {
       josefin: ['Josefin Sans', 'sans-serif'],
     },
-
-    extend: {},
   },
   plugins: [],
 }
-
