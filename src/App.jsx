@@ -2,6 +2,7 @@
 import { useState } from "react";
 import Task from "./components/task";
 import TaskState from "./components/TaskState";
+import Title from "./components/Title";
 
 function App() {
   const [theme, setTheme] = useState("darkTheme");
@@ -19,10 +20,6 @@ function App() {
     theme === "darkTheme" ? "bg-very-dark-blue" : "bg-very-light-gray";
   const toDoColor =
     theme === "darkTheme" ? "bg-very-dark-desaturated-blue" : "bg-white";
-  const textColor =
-    theme === "darkTheme"
-      ? "text-very-light-grayish-blue"
-      : "text-very-dark-blue";
 
   const addTask = () => {
     if (inputValue.trim() === "") {
@@ -73,18 +70,7 @@ function App() {
 
       {/* Título con theme icon */}
       <div className="absolute top-36 left-1/2 -translate-x-1/2 w-full max-w-[500px] flex flex-col justify-center items-center">
-        <div className="flex justify-between mb-8 w-full">
-          <h1 className="text-5xl tracking-[1.3rem] font-bold text-white">
-            TODO
-          </h1>
-          <button
-            onClick={() =>
-              setTheme(theme === "darkTheme" ? "lightTheme" : "darkTheme")
-            }
-          >
-            <img src={iconUrl} alt="icon theme" />
-          </button>
-        </div>
+        <Title text="TODO" theme={theme} setTheme={setTheme} iconUrl={iconUrl} />
 
         {/* Input para añadir tarea */}
         <div
