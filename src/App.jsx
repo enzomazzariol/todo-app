@@ -56,7 +56,6 @@ function App() {
 
   const handlerFilter = (newFilter) => {
     setFilter(newFilter);
-    setTask(filterTasks(newFilter));
   }
 
   return (
@@ -94,8 +93,8 @@ function App() {
           className={`my-5 w-full p-3 ${toDoColor} flex flex-col rounded shadow-lg`}
         >
           <ul className="w-full rounded">
-            {task.length > 0 ? (
-              task.map((t) => (
+            {filterTasks(filter).length > 0 ? (
+              filterTasks(filter).map((t) => (
                 <Task key={t.id} t={t} completeTask={completeTask} />
               ))
             ) : (
@@ -105,14 +104,14 @@ function App() {
             )}
           </ul>
 
-          <div className="flex justify-between items-center mt-4 font-medium text-sm text-dark-grayish-blue w-full">
-            <p className="flex-shrink-1">{task.length} items left</p>
-            <div className="flex gap-4 justify-center mx-auto">
+          <div className="grid grid-cols-3 mt-4 font-medium text-sm text-dark-grayish-blue">
+            <p className="">{filterTasks("Active").length} items left</p>
+            <div className="flex gap-5">
               <TaskState setFilter={handlerFilter} filter={filter} text="Active" />
               <TaskState setFilter={handlerFilter} filter={filter} text="Completed" />
               <TaskState setFilter={handlerFilter} filter={filter} text="All" />
             </div>
-            <button className="flex-shrink-1" onClick={deleteTask}>
+            <button className="justify-self-end hover:underline underline-offset-4" onClick={deleteTask}>
               Clear completed
             </button>
           </div>
