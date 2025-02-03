@@ -6,8 +6,10 @@ export default function Task({ t, completeTask }) {
     <>
       <li
         key={t.id}
-        className={`w-full py-2 mb-2 flex gap-4 text-light-grayish-blue-dark
-                    ${t.completed ? "line-through text-very-dark-grayish-blue opacity-75" : ""}`}
+        className={`w-full py-4 pl-3 flex gap-4 text-light-grayish-blue-dark 
+          border-b-2 border-b-very-dark-grayish-blue-alt border-opacity-70
+          last:border-b-0 last:pb-2
+          ${t.completed ? "line-through text-very-dark-grayish-blue opacity-75" : ""}`}
       >
         <button
           className={`border border-dark-grayish-blue-dark rounded-full w-6 h-6 flex items-center justify-center 
@@ -24,7 +26,6 @@ export default function Task({ t, completeTask }) {
         </button>
         {t.text}
       </li>
-      <div className="w-full bg-very-dark-grayish-blue-alt opacity-70 h-[1.5px] mb-2" />
     </>
   );
 }

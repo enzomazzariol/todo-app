@@ -68,15 +68,21 @@ function App() {
       />
 
       {/* Título con theme icon */}
-      <div className="absolute top-36 left-1/2 -translate-x-1/2 w-full max-w-[500px] flex flex-col justify-center items-center">
-        <Title text="TODO" theme={theme} setTheme={setTheme} iconUrl={iconUrl} />
+      <div className="absolute top-36 left-1/2 -translate-x-1/2 w-[450px] lg:w-2/5 flex flex-col justify-center items-center">
+        <Title
+          text="TODO"
+          theme={theme}
+          setTheme={setTheme}
+          iconUrl={iconUrl}
+        />
 
         {/* Input para añadir tarea */}
         <div
           className={`w-full h-14 p-3 ${toDoColor} mb-2 rounded flex gap-4 shadow-lg`}
         >
           <button
-            className="border border-dark-grayish-blue-dark rounded-full w-6 h-6 mt-1"
+            className="border border-dark-grayish-blue-dark rounded-full w-6 h-6 mt-1 transition duration-300 ease-in-out
+           hover:bg-blue-custom hover:border-0"
             onClick={addTask}
           />
           <input
@@ -90,9 +96,9 @@ function App() {
         </div>
 
         <div
-          className={`my-5 w-full p-3 ${toDoColor} flex flex-col rounded shadow-lg`}
+          className={`my-5 w-full ${toDoColor} flex flex-col rounded shadow-lg`}
         >
-          <ul className="w-full rounded">
+          <ul className="w-full rounded pt-1">
             {filterTasks(filter).length > 0 ? (
               filterTasks(filter).map((t) => (
                 <Task key={t.id} t={t} completeTask={completeTask} />
@@ -103,15 +109,25 @@ function App() {
               </p>
             )}
           </ul>
-
-          <div className="grid grid-cols-3 mt-4 font-medium text-sm text-dark-grayish-blue">
+          <div className="grid grid-cols-3 mt-2 px-3 py-4 font-medium text-xs md:text-sm text-dark-grayish-blue border-t-2 border-t-very-dark-grayish-blue-alt border-opacity-70">
             <p className="">{filterTasks("Active").length} items left</p>
-            <div className="flex gap-5">
-              <TaskState setFilter={handlerFilter} filter={filter} text="Active" />
-              <TaskState setFilter={handlerFilter} filter={filter} text="Completed" />
+            <div className="flex gap-4 xl:gap-10">
               <TaskState setFilter={handlerFilter} filter={filter} text="All" />
+              <TaskState
+                setFilter={handlerFilter}
+                filter={filter}
+                text="Active"
+              />
+              <TaskState
+                setFilter={handlerFilter}
+                filter={filter}
+                text="Completed"
+              />
             </div>
-            <button className="justify-self-end hover:underline underline-offset-4" onClick={deleteTask}>
+            <button
+              className="justify-self-end hover:underline underline-offset-4 lg:ms-3"
+              onClick={deleteTask}
+            >
               Clear completed
             </button>
           </div>
