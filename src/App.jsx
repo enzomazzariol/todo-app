@@ -16,8 +16,6 @@ function App() {
       : "images/bg-desktop-light.jpg";
   const iconUrl =
     theme === "darkTheme" ? "images/icon-sun.svg" : "images/icon-moon.svg";
-  const backgroundColor =
-    theme === "darkTheme" ? "bg-very-dark-blue" : "bg-very-light-gray";
   const toDoColor =
     theme === "darkTheme" ? "bg-very-dark-desaturated-blue" : "bg-white";
 
@@ -28,7 +26,6 @@ function App() {
 
     const newTask = { id: Date.now(), text: inputValue, completed: false };
     setTask([...task, newTask]);
-    console.log(newTask);
     setInputValue("");
   };
 
@@ -36,30 +33,32 @@ function App() {
     setTask(task.filter((task) => !task.completed));
   };
 
-  const completeTask = (id) =>{
-    setTask(task.map(task => task.id === id ? {...task, completed: !task.completed} : task))
-  }
+  const completeTask = (id) => {
+    setTask(
+      task.map((task) =>
+        task.id === id ? { ...task, completed: !task.completed } : task
+      )
+    );
+  };
 
   const filterTasks = (filter) => {
     switch (filter) {
       case "Active":
         return task.filter((task) => !task.completed);
-      
       case "Completed":
         return task.filter((task) => task.completed);
-      
       case "All":
       default:
         return task;
     }
-  }
+  };
 
   const handlerFilter = (newFilter) => {
     setFilter(newFilter);
-  }
+  };
 
   return (
-    <section className={`relative ${backgroundColor} min-h-screen`}>
+    <section className="relative bg-very-dark-blue min-h-screen font-josefin">
       {/* Banner */}
       <img
         src={imageUrl}
@@ -68,7 +67,7 @@ function App() {
       />
 
       {/* Título con theme icon */}
-      <div className="absolute top-36 left-1/2 -translate-x-1/2 w-[450px] lg:w-2/5 flex flex-col justify-center items-center">
+      <div className="absolute top-28 left-1/2 -translate-x-1/2 w-[450px] lg:w-2/5 flex flex-col justify-center items-center">
         <Title
           text="TODO"
           theme={theme}
@@ -78,11 +77,10 @@ function App() {
 
         {/* Input para añadir tarea */}
         <div
-          className={`w-full h-14 p-3 ${toDoColor} mb-2 rounded flex gap-4 shadow-lg`}
+          className={`w-full h-14 p-3 px-5 ${toDoColor} rounded-md flex gap-4 shadow-lg`}
         >
           <button
-            className="border border-dark-grayish-blue-dark rounded-full w-6 h-6 mt-1 transition duration-300 ease-in-out
-           hover:bg-blue-custom hover:border-0"
+            className="border border-dark-grayish-blue-dark rounded-full w-6 h-6 mt-1 transition duration-300 ease-in-out"
             onClick={addTask}
           />
           <input
@@ -91,14 +89,13 @@ function App() {
             onChange={(e) => setInputValue(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && addTask()}
             placeholder="Create a new todo..."
-            className="w-full bg-very-dark-desaturated-blue text-light-grayish-blue-dark focus:outline-none font-medium inline-block"
+            className="w-full bg-very-dark-desaturated-blue text-light-grayish-blue-dark focus:outline-none font-medium"
           />
         </div>
 
-        <div
-          className={`my-5 w-full ${toDoColor} flex flex-col rounded shadow-lg`}
-        >
-          <ul className="w-full rounded pt-1">
+        {/* Lista de tareas */}
+        <div className="my-6 w-full bg-very-dark-desaturated-blue rounded-md shadow-lg">
+          <ul className="">
             {filterTasks(filter).length > 0 ? (
               filterTasks(filter).map((t) => (
                 <Task key={t.id} t={t} completeTask={completeTask} />
@@ -109,31 +106,39 @@ function App() {
               </p>
             )}
           </ul>
-          <div className="grid grid-cols-3 mt-2 px-3 py-4 font-medium text-xs md:text-sm text-dark-grayish-blue border-t-2 border-t-very-dark-grayish-blue-alt border-opacity-70">
-            <p className="">{filterTasks("Active").length} items left</p>
-            <div className="flex gap-4 xl:gap-10">
+
+          {/* Contador y botón Clear Completed */}
+          <div className="flex justify-between px-6 py-5 md:py-2 text-base md:text-sm xl:text-base text-very-dark-grayish-blue-dark font-semibold border-t-2 border-t-very-dark-grayish-blue-alt border-opacity-70">
+            <button className="cursor-not-allowed">{filterTasks("Active").length} items left</button>
+
+            {/* Filtros para DESKTOP */}
+            <div className="hidden md:flex justify-center gap-8 font-bold bg-very-dark-desaturated-blue px-4 py-3">
               <TaskState setFilter={handlerFilter} filter={filter} text="All" />
-              <TaskState
-                setFilter={handlerFilter}
-                filter={filter}
-                text="Active"
-              />
-              <TaskState
-                setFilter={handlerFilter}
-                filter={filter}
-                text="Completed"
-              />
+              <TaskState setFilter={handlerFilter}filter={filter} text="Active" />
+              <TaskState setFilter={handlerFilter} filter={filter} text="Completed" />
             </div>
+
             <button
-              className="justify-self-end hover:underline underline-offset-4 lg:ms-3"
+              className="hover:text-light-grayish-blue transition"
               onClick={deleteTask}
             >
-              Clear completed
+              Clear Completed
             </button>
           </div>
         </div>
 
-        <p className="text-center mt-4 text-very-dark-grayish-blue">
+        {/* Filtros para MOBILE */}
+        <div className="w-full md:hidden flex justify-center gap-8 font-bold bg-very-dark-desaturated-blue px-4 py-3 rounded-md shadow-md">
+          <TaskState setFilter={handlerFilter} filter={filter} text="All" />
+          <TaskState setFilter={handlerFilter} filter={filter} text="Active" />
+          <TaskState
+            setFilter={handlerFilter}
+            filter={filter}
+            text="Completed"
+          />
+        </div>
+
+        <p className="text-center text-dark-grayish-blue text-base mt-4">
           Drag and drop to reorder list
         </p>
       </div>
