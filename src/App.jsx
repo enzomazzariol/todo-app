@@ -46,7 +46,7 @@ function App() {
     document.documentElement.classList.toggle("dark", theme === "dark");
   }, [theme]);
 
-  const reorder = (result) => {
+  const onDragEnd = (result) => {
     const { source, destination } = result;
     if (!destination) return;
 
@@ -58,7 +58,7 @@ function App() {
   };
 
   return (
-    <section className="relative w-fit bg-very-light-gray min-h-screen overflow-auto font-josefin dark:bg-very-dark-blue">
+    <section className="relative bg-very-light-gray min-h-screen overflow-auto font-josefin dark:bg-very-dark-blue">
       <img
         src={imageUrl}
         alt="banner background"
@@ -79,8 +79,8 @@ function App() {
         />
 
         <div className="my-6 w-full bg-white dark:bg-very-dark-desaturated-blue rounded-md shadow-lg">
-          <DragDropContext onDragEnd={reorder}>
-            <Droppable droppableId="task">
+          <DragDropContext onDragEnd={onDragEnd}>
+            <Droppable droppableId="">
               {(provided) => (
                 <ul
                   className="relative"

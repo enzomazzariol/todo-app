@@ -1,27 +1,27 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/react-in-jsx-scope */
-
 import { Draggable } from "react-beautiful-dnd";
 
 export default function Task({ t, completeTask, deleteTask, index }) {
   return (
     <Draggable draggableId={t.id.toString()} index={index}>
-      {(provided) => (
+      {(provided, snapshot) => (
         <li
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           className={`w-full py-4 pl-5 flex justify-between text-very-dark-grayish-blue dark:text-light-grayish-blue-dark 
-            border-b-2 border-b-light-grayish-blue dark:border-b-very-dark-grayish-blue-alt cursor-pointer
-            text-lg last:border-b-0 
-            ${!t.completed ? "hover:text-very-dark-blue dark:hover:text-very-light-gray transition duration-300 ease-in-out" : ""}
-            ${t.completed ? "line-through text-very-dark-grayish-blue opacity-75" : ""}`}
+        border-b-2 border-b-light-grayish-blue dark:border-b-very-dark-grayish-blue-alt cursor-pointer
+        text-lg last:border-b-0 
+        ${!t.completed ? "hover:text-very-dark-blue dark:hover:text-very-light-gray transition duration-300 ease-in-out" : ""}
+        ${t.completed ? "line-through text-very-dark-grayish-blue opacity-75" : ""}
+        ${snapshot.isDragging ? "bg-light-grayish-blue dark:bg-very-dark-grayish-blue-alt" : ""}`}
         >
           <div className="flex items-center gap-4">
             <button
               className={`border border-light-grayish-blue dark:border-dark-grayish-blue-dark rounded-full w-6 h-6 flex items-center justify-center 
-                      hover:border-blue-custom dark:hover:border-blue-custom transition duration-300
-                      ${t.completed ? "bg-gradient-to-r from-blue-custom to-purple-custom border-0" : "bg-transparent"}`}
+            hover:border-blue-custom dark:hover:border-blue-custom transition duration-300
+            ${t.completed ? "bg-gradient-to-r from-blue-custom to-purple-custom border-0" : "bg-transparent"}`}
               onClick={() => completeTask(t.id)}
             >
               {t.completed && (
