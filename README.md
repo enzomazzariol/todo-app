@@ -22,14 +22,18 @@ A modern and minimalist **To-Do List** application built with **React**. It help
 1. Clone the repository:  
    ```bash
    git clone https://github.com/your-username/todo-app.git
-Navigate into the project folder:
-cd todo-app
 
-Install dependencies:
-npm install
+2. Navigate into the project folder:
+   ```bash
+   cd todo-app
 
-Start the development server:
-npm run dev
+3. Install dependencies:
+   ```bash
+   npm install
+
+4. Start the development server:
+   ```bash
+   npm run dev
 
 🚀 Deployment
 Easily deploy the app on platforms like Vercel or Netlify.
