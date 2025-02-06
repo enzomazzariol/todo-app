@@ -1,32 +1,39 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/react-in-jsx-scope */
 
-export default function Task({ t, completeTask }) {
+export default function Task({ t, completeTask, deleteTask }) {
   return (
     <>
       <li
         key={t.id}
-        className={`w-full py-4 pl-5 flex gap-4 text-light-grayish-blue-dark 
-          border-b-2 border-b-very-dark-grayish-blue-alt border-opacity-70 cursor-pointer
-          last:border-b-0 last:pb-4
-          ${!t.completed ? "hover:text-very-light-gray transition duration-300 ease-in-out" : ""}
+        className={`w-full py-4 pl-5 flex justify-between text-very-dark-grayish-blue dark:text-light-grayish-blue-dark 
+          border-b-2 border-b-light-grayish-blue dark:border-b-very-dark-grayish-blue-alt cursor-pointer
+          text-lg
+          last:border-b-0 
+          ${!t.completed ? "hover:text-very-dark-blue dark:hover:text-very-light-gray transition duration-300 ease-in-out" : ""}
           ${t.completed ? "line-through text-very-dark-grayish-blue opacity-75" : ""}`}
       >
-        <button
-          className={`border border-dark-grayish-blue-dark rounded-full w-6 h-6 flex items-center justify-center 
-                      hover:border-blue-custom transition duration-300
-                         ${t.completed ? "bg-gradient-to-r from-blue-custom to-purple-custom border-0" : "bg-transparent"}`}
-          onClick={() => completeTask(t.id)}
-        >
-          {t.completed && (
-            <img
-              src="images/icon-check.svg"
-              alt="icon check"
-              className="w-3 h-3"
-            />
-          )}
+        <div className="flex items-center gap-4">
+          <button
+            className={`border border-light-grayish-blue dark:border-dark-grayish-blue-dark rounded-full w-6 h-6 flex items-center justify-center 
+                    hover:border-blue-custom dark:hover:border-blue-custom transition duration-300
+                    ${t.completed ? "bg-gradient-to-r from-blue-custom to-purple-custom border-0" : "bg-transparent"}`}
+            onClick={() => completeTask(t.id)}
+          >
+            {t.completed && (
+              <img
+                src="images/icon-check.svg"
+                alt="icon check"
+                className="w-3 h-3"
+              />
+            )}
+          </button>
+          {t.text}
+        </div>
+
+        <button className="px-6" onClick={() => deleteTask(t.id)}>
+          <img src="images/icon-cross.svg" alt="cross icon" className="" />
         </button>
-        {t.text}
       </li>
     </>
   );

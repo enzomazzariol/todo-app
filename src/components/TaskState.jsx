@@ -7,7 +7,7 @@ export default function TaskState({setFilter, filter, text}) {
     return (
         <button
         onClick={() => setFilter(text)}
-        className={`hover:text-white duration-300 ${
+        className={`dark:hover:text-white hover:text-very-dark-desaturated-blue duration-300 ${
             filter === text ? "text-purple" : "text-dark-grayish-blue"
         }`}
         >

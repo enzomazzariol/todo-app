@@ -1,64 +1,39 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Task from "./components/task";
 import TaskState from "./components/TaskState";
 import Title from "./components/Title";
+import InputTask from "./components/InputTask";
+import useTasks from "./hooks/useTasks";
 
 function App() {
-  const [theme, setTheme] = useState("darkTheme");
-  const [task, setTask] = useState([]);
+  const [theme, setTheme] = useState(
+    window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
+  );
   const [inputValue, setInputValue] = useState("");
-  const [filter, setFilter] = useState("All");
+  const { addTask, deleteTask, completeTask, deleteTaskCompleted, filterTasks, handlerFilter, filter } = useTasks();
+  const filteredTasks = filterTasks(filter);
+  const filters = ["All", "Active", "Completed"];
 
   const imageUrl =
-    theme === "darkTheme"
+    theme === "dark"
       ? "images/bg-desktop-dark.jpg"
       : "images/bg-desktop-light.jpg";
+
   const iconUrl =
-    theme === "darkTheme" ? "images/icon-sun.svg" : "images/icon-moon.svg";
-  const toDoColor =
-    theme === "darkTheme" ? "bg-very-dark-desaturated-blue" : "bg-white";
+    theme === "dark" ? "images/icon-sun.svg" : "images/icon-moon.svg";
 
-  const addTask = () => {
-    if (inputValue.trim() === "") {
-      return;
+  useEffect(() => {
+    if (theme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
     }
+  }, [theme]);
 
-    const newTask = { id: Date.now(), text: inputValue, completed: false };
-    setTask([...task, newTask]);
-    setInputValue("");
-  };
-
-  const deleteTask = () => {
-    setTask(task.filter((task) => !task.completed));
-  };
-
-  const completeTask = (id) => {
-    setTask(
-      task.map((task) =>
-        task.id === id ? { ...task, completed: !task.completed } : task
-      )
-    );
-  };
-
-  const filterTasks = (filter) => {
-    switch (filter) {
-      case "Active":
-        return task.filter((task) => !task.completed);
-      case "Completed":
-        return task.filter((task) => task.completed);
-      case "All":
-      default:
-        return task;
-    }
-  };
-
-  const handlerFilter = (newFilter) => {
-    setFilter(newFilter);
-  };
 
   return (
-    <section className="relative bg-very-dark-blue min-h-screen font-josefin">
+    <section className="relative bg-very-light-gray  min-h-screen font-josefin dark:bg-very-dark-blue">
       {/* Banner */}
       <img
         src={imageUrl}
@@ -76,51 +51,56 @@ function App() {
         />
 
         {/* Input para añadir tarea */}
-        <div
-          className={`w-full h-14 p-3 px-5 ${toDoColor} rounded-md flex gap-4 shadow-lg`}
-        >
-          <button
-            className="border border-dark-grayish-blue-dark rounded-full w-6 h-6 mt-1 transition duration-300 ease-in-out"
-            onClick={addTask}
-          />
-          <input
-            type="text"
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && addTask()}
-            placeholder="Create a new todo..."
-            className="w-full bg-very-dark-desaturated-blue text-light-grayish-blue-dark focus:outline-none font-medium"
-          />
-        </div>
+        <InputTask
+          addTask={addTask}
+          setInputValue={setInputValue}
+          inputValue={inputValue}
+        />
 
         {/* Lista de tareas */}
-        <div className="my-6 w-full bg-very-dark-desaturated-blue rounded-md shadow-lg">
+        <div className="my-6 w-full bg-white dark:bg-very-dark-desaturated-blue rounded-md shadow-lg">
           <ul className="">
-            {filterTasks(filter).length > 0 ? (
-              filterTasks(filter).map((t) => (
-                <Task key={t.id} t={t} completeTask={completeTask} />
+            {filteredTasks.length > 0 ? (
+              filteredTasks.map((t) => (
+                <Task
+                  key={t.id}
+                  t={t}
+                  completeTask={completeTask}
+                  deleteTask={deleteTask}
+                />
               ))
             ) : (
-              <p className="text-center text-dark-grayish-blue my-6">
+              <p className="text-center text-very-dark-desaturated-blue dark:text-dark-grayish-blue my-6">
                 No tasks added yet.
               </p>
             )}
           </ul>
 
           {/* Contador y botón Clear Completed */}
-          <div className="flex justify-between px-6 py-5 md:py-2 text-base md:text-sm xl:text-base text-very-dark-grayish-blue-dark font-semibold border-t-2 border-t-very-dark-grayish-blue-alt border-opacity-70">
-            <button className="cursor-not-allowed">{filterTasks("Active").length} items left</button>
+          <div
+            className="flex justify-between px-6 py-5 md:py-2 text-base md:text-sm xl:text-base
+           text-very-dark-grayish-blue-dark font-semibold border-t-2 border-t-light-grayish-blue dark:border-t-very-dark-grayish-blue-alt"
+          >
+            <button className="text-dark-grayish-blue">
+              {filterTasks("Active").length} items left
+            </button>
 
             {/* Filtros para DESKTOP */}
-            <div className="hidden md:flex justify-center gap-8 font-bold bg-very-dark-desaturated-blue px-4 py-3">
-              <TaskState setFilter={handlerFilter} filter={filter} text="All" />
-              <TaskState setFilter={handlerFilter}filter={filter} text="Active" />
-              <TaskState setFilter={handlerFilter} filter={filter} text="Completed" />
+            <div className="hidden md:flex justify-center gap-8 font-bold bg-white dark:bg-very-dark-desaturated-blue px-4 py-3">
+              {filters.map((f) => (
+                <TaskState
+                  key={f}
+                  setFilter={handlerFilter}
+                  filter={filter}
+                  text={f}
+                />
+              ))}
             </div>
 
+            {/* Eliminar tareas completadas */}
             <button
-              className="hover:text-light-grayish-blue transition"
-              onClick={deleteTask}
+              className="text-dark-grayish-blue dark:hover:text-white hover:text-very-dark-blue transition"
+              onClick={deleteTaskCompleted}
             >
               Clear Completed
             </button>
@@ -128,14 +108,15 @@ function App() {
         </div>
 
         {/* Filtros para MOBILE */}
-        <div className="w-full md:hidden flex justify-center gap-8 font-bold bg-very-dark-desaturated-blue px-4 py-3 rounded-md shadow-md">
-          <TaskState setFilter={handlerFilter} filter={filter} text="All" />
-          <TaskState setFilter={handlerFilter} filter={filter} text="Active" />
-          <TaskState
-            setFilter={handlerFilter}
-            filter={filter}
-            text="Completed"
-          />
+        <div className="w-full md:hidden flex justify-center gap-8 font-bold bg-white dark:bg-very-dark-desaturated-blue px-4 py-3 rounded-md shadow-md">
+          {filters.map((f) => (
+            <TaskState
+              key={f}
+              setFilter={handlerFilter}
+              filter={filter}
+              text={f}
+            />
+          ))}
         </div>
 
         <p className="text-center text-dark-grayish-blue text-base mt-4">
