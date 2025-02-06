@@ -13,9 +13,9 @@ A modern and minimalist **To-Do List** application built with **React**. It help
 ![image](https://github.com/user-attachments/assets/690ce341-6388-4a69-908a-a4d09aba009f)
 
 ## 🛠️ Technologies Used  
-- **React** with hooks (`useState`, `useEffect`).  
+- **React**.  
 - **Tailwind CSS** for modern and responsive styling.  
-- **react-beautiful-dnd** for drag & drop functionality.  
+- **dnd-kit** for drag & drop functionality.  
 
 ## 📦 Installation  
 
