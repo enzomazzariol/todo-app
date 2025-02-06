@@ -31,8 +31,15 @@ export default function Task({ t, completeTask, deleteTask }) {
           {t.text}
         </div>
 
-        <button className="px-6" onClick={() => deleteTask(t.id)}>
-          <img src="images/icon-cross.svg" alt="cross icon" className="" />
+        <button
+          className="px-6 transition-transform duration-300 hover:rotate-90"
+          onClick={() => deleteTask(t.id)}
+        >
+          <img
+            src="images/icon-cross.svg"
+            alt="cross icon"
+            className="transition-transform duration-300"
+          />
         </button>
       </li>
     </>
