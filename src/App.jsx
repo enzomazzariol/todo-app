@@ -7,7 +7,7 @@ import InputTask from "./components/InputTask";
 import useTasks from "./hooks/useTasks";
 
 function App() {
-  
+
   const [theme, setTheme] = useState(
     window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
   );
@@ -34,7 +34,7 @@ function App() {
 
 
   return (
-    <section className="relative bg-very-light-gray  min-h-screen font-josefin dark:bg-very-dark-blue">
+    <section className="relative w-fit bg-very-light-gray min-h-screen overflow-auto font-josefin dark:bg-very-dark-blue">
       {/* Banner */}
       <img
         src={imageUrl}
@@ -120,7 +120,7 @@ function App() {
           ))}
         </div>
 
-        <p className="text-center text-dark-grayish-blue text-base mt-4">
+        <p className="text-center text-dark-grayish-blue text-base my-5">
           Drag and drop to reorder list
         </p>
       </div>

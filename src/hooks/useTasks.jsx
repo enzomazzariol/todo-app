@@ -25,7 +25,7 @@ export default function useTasks() {
 
   const deleteTaskCompleted = () => setTask(task.filter((t) => !t.completed));
 
-  const filterTasks = () => {
+  const filterTasks = (filter) => {
     switch (filter) {
       case "Active":
         return task.filter((t) => !t.completed);
