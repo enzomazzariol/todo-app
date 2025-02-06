@@ -5,7 +5,20 @@ import TaskState from "./components/TaskState";
 import Title from "./components/Title";
 import InputTask from "./components/InputTask";
 import useTasks from "./hooks/useTasks";
-import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+  arrayMove,
+} from "@dnd-kit/sortable";
+import { sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 
 function App() {
   const [task, setTask] = useState(() => {
@@ -46,15 +59,23 @@ function App() {
     document.documentElement.classList.toggle("dark", theme === "dark");
   }, [theme]);
 
-  const onDragEnd = (result) => {
-    const { source, destination } = result;
-    if (!destination) return;
+  // Configurar sensores para el Drag and Drop
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
 
-    const reorderedTasks = Array.from(task);
-    const [movedItem] = reorderedTasks.splice(source.index, 1);
-    reorderedTasks.splice(destination.index, 0, movedItem);
+  const handleDragEnd = (event) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
 
-    setTask(reorderedTasks);
+    setTask((tasks) => {
+      const oldIndex = tasks.findIndex((t) => t.id === active.id);
+      const newIndex = tasks.findIndex((t) => t.id === over.id);
+      return arrayMove(tasks, oldIndex, newIndex);
+    });
   };
 
   return (
@@ -79,34 +100,33 @@ function App() {
         />
 
         <div className="my-6 w-full bg-white dark:bg-very-dark-desaturated-blue rounded-md shadow-lg">
-          <DragDropContext onDragEnd={onDragEnd}>
-            <Droppable droppableId="">
-              {(provided) => (
-                <ul
-                  className="relative"
-                  ref={provided.innerRef}
-                  {...provided.droppableProps}
-                >
-                  {filteredTasks.length > 0 ? (
-                    filteredTasks.map((t, index) => (
-                      <Task
-                        key={t.id}
-                        t={t}
-                        completeTask={completeTask}
-                        deleteTask={deleteTask}
-                        index={index}
-                      />
-                    ))
-                  ) : (
-                    <p className="text-center text-very-dark-desaturated-blue dark:text-dark-grayish-blue my-6">
-                      No tasks added yet.
-                    </p>
-                  )}
-                  {provided.placeholder}
-                </ul>
-              )}
-            </Droppable>
-          </DragDropContext>
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}
+          >
+            <SortableContext
+              items={task}
+              strategy={verticalListSortingStrategy}
+            >
+              <ul className="relative">
+                {filteredTasks.length > 0 ? (
+                  filteredTasks.map((t) => (
+                    <Task
+                      key={t.id}
+                      t={t}
+                      completeTask={completeTask}
+                      deleteTask={deleteTask}
+                    />
+                  ))
+                ) : (
+                  <p className="text-center text-very-dark-desaturated-blue dark:text-dark-grayish-blue my-6">
+                    No tasks added yet.
+                  </p>
+                )}
+              </ul>
+            </SortableContext>
+          </DndContext>
 
           <div className="flex justify-between px-6 py-5 md:py-2 text-base md:text-sm xl:text-base text-very-dark-grayish-blue-dark font-semibold border-t-2 border-t-light-grayish-blue dark:border-t-very-dark-grayish-blue-alt">
             <button className="text-dark-grayish-blue">
