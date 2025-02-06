@@ -65,7 +65,7 @@ function App() {
         className="h-72 w-full object-cover"
       />
 
-      <div className="absolute top-28 left-1/2 -translate-x-1/2 w-[450px] lg:w-2/5 flex flex-col justify-center items-center">
+      <div className="absolute top-28 left-1/2 -translate-x-1/2 w-[380px] sm:w-[500px] lg:w-2/5 flex flex-col justify-center items-center">
         <Title
           text="TODO"
           theme={theme}
