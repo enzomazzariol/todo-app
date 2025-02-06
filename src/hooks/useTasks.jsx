@@ -1,8 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function useTasks() {
-  const [task, setTask] = useState([]);
+  const [task, setTask] = useState(() => {
+    const savedTasks = localStorage.getItem("tasks");
+    return savedTasks ? JSON.parse(savedTasks) : [];
+  });
   const [filter, setFilter] = useState("All");
+
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(task));
+  }, [task])
 
   const addTask = (taskText) => {
     const newTask = { id: Date.now(), text: taskText, completed: false };

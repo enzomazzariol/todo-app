@@ -7,6 +7,7 @@ import InputTask from "./components/InputTask";
 import useTasks from "./hooks/useTasks";
 
 function App() {
+  
   const [theme, setTheme] = useState(
     window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
   );
