@@ -5,7 +5,10 @@ import { CSS } from "@dnd-kit/utilities";
 
 export default function Task({ t, completeTask, deleteTask }) {
   const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id: t.id });
+    useSortable({
+      id: t.id,
+      animateLayoutChanges: () => false,
+    });
 
   const style = {
     transform: CSS.Transform.toString(transform),
