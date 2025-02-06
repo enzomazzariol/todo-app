@@ -32,7 +32,10 @@ export default function Task({ t, completeTask, deleteTask }) {
           className={`border border-light-grayish-blue dark:border-dark-grayish-blue-dark rounded-full w-6 h-6 flex items-center justify-center 
             hover:border-blue-custom dark:hover:border-blue-custom transition duration-300
             ${t.completed ? "bg-gradient-to-r from-blue-custom to-purple-custom border-0" : "bg-transparent"}`}
-          onClick={() => completeTask(t.id)}
+          onMouseDown={(e) => {
+            e.stopPropagation();
+            completeTask(t.id);
+          }}
         >
           {t.completed && (
             <img
@@ -47,7 +50,10 @@ export default function Task({ t, completeTask, deleteTask }) {
 
       <button
         className="px-6 transition-transform duration-300 hover:rotate-90"
-        onClick={() => deleteTask(t.id)}
+        onMouseDown={(e) => {
+          e.stopPropagation();
+          deleteTask(t.id);
+        }}
       >
         <img
           src="images/icon-cross.svg"
